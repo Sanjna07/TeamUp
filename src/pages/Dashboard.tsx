@@ -16,7 +16,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
+  
   useEffect(() => {
     // TODO: Fetch rooms from your MongoDB backend
     const mockRooms = [
@@ -25,19 +25,51 @@ const Dashboard = () => {
         name: 'General Chat',
         description: 'Welcome to TeamUp! Connect with everyone here.',
         category: 'General',
-        members: 150
+        members: 5
       },
       {
         id: 'ai-ml',
-        name: 'AI/ML Hub',
+        name: 'AI/ML Enthusiast',
         description: 'Discuss AI and Machine Learning projects',
         category: 'AI/ML',
-        members: 75
+        members: 5
       },
       // Add more mock rooms
     ];
     setRooms(mockRooms);
   }, []);
+
+  // Function to handle room creation
+  const handleCreateRoom = async (roomData: any) => {
+    try {
+      // TODO: Send room data to your MongoDB backend
+      console.log('Create room:', roomData);
+      
+      // Generate a temporary ID (in production, this would come from your backend)
+      const tempId = Date.now().toString();
+      
+      // Create a new room object with 0 members
+      const newRoom: Room = {
+        id: tempId,
+        name: roomData.name,
+        description: roomData.description,
+        category: roomData.category || 'General', // Default category if not provided
+        members: 0 // New room starts with 0 members
+      };
+      
+      // Add the new room to the rooms array
+      setRooms(prevRooms => [...prevRooms, newRoom]);
+      
+      // Close the modal
+      setIsCreateModalOpen(false);
+      
+      // Optionally, navigate to the new room
+      // navigate(`/chat/${tempId}`);
+    } catch (error) {
+      console.error('Error creating room:', error);
+      // Handle error (show error message to user)
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-6">
@@ -52,7 +84,7 @@ const Dashboard = () => {
             Create Room
           </button>
         </div>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rooms.map((room) => (
             <ChatRoomCard
@@ -63,16 +95,55 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-
+      
       <CreateRoomModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={async (roomData) => {
-          // TODO: Send room data to your MongoDB backend
-          console.log('Create room:', roomData);
-          setIsCreateModalOpen(false);
-        }}
+        onSubmit={handleCreateRoom}
       />
+      
+      {/* DevArchetype Button - Bottom Right */}
+      <button 
+        onClick={() => navigate('/DevArchetype')}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white px-5 py-3 rounded-full
+                shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
+                before:absolute before:inset-0 before:rounded-full before:blur-lg
+                before:bg-blue-500/30 before:animate-pulse"
+        style={{
+          animation: "float 3s ease-in-out infinite",
+          position: "fixed",
+          bottom: "1.5rem",
+          right: "1.5rem",
+        }}
+      >
+        DevArchetype
+        <div
+          className="text-sm mt-1"
+          style={{
+            animation: "pulse 2s infinite ease-in-out",
+            display: "block",
+            opacity: 0.8,
+          }}
+        >
+          Take Test
+        </div>
+      </button>
+
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+          }
+          
+          @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.6; transform: scale(1); }
+          }
+        `}
+      </style>
     </div>
   );
 };
