@@ -44,7 +44,7 @@ interface Participant {
 const mockParticipants: Participant[] = [
   {
     id: "user1",
-    name: "Rahul Sharma",
+    name: "Sanjana Tripathi",
     isOnline: true,
     title: "Senior Frontend Developer",
     company: "TechVista Solutions",
@@ -57,7 +57,7 @@ const mockParticipants: Participant[] = [
   },
   {
     id: "user2",
-    name: "Priya Patel",
+    name: "Madhav Puri",
     isOnline: true,
     title: "Full Stack Engineer",
     company: "InnovateX",
@@ -84,7 +84,7 @@ const mockParticipants: Participant[] = [
   },
   {
     id: "user4",
-    name: "Anjali Singh",
+    name: "Navnidhi M",
     isOnline: true,
     title: "UI/UX Developer",
     company: "DesignFirst Digital",

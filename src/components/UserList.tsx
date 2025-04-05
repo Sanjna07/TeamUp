@@ -78,7 +78,7 @@ const UserList = ({ roomId }: Props) => {
         {users.map((user) => (
           <div
             key={user.id}
-            className="p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+            className="p-3 hover:bg-gray-100 rounded-lg cursor-pointer"
             onClick={() => handleUserClick(user)}
           >
             <div className="flex items-center space-x-3">
@@ -105,7 +105,7 @@ const UserList = ({ roomId }: Props) => {
                 {user.interests.map(interest => (
                   <span
                     key={interest}
-                    className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full"
+                    className="text-xs bg-purple-300 text-purple-800 px-2 py-1 rounded-full"
                   >
                     {interest}
                   </span>
