@@ -369,7 +369,7 @@ const DevArchetype = () => {
                  " methodical approaches"}.
               </p>
               <p>
-                This profile thrives on projects that require both 
+                You thrive on projects that require both 
                 {result.primary === "architect" ? " systemic thinking" : 
                  result.primary === "hacker" ? " quick problem-solving" : 
                  result.primary === "craftsman" ? " technical excellence" : 

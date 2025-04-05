@@ -40,6 +40,8 @@ interface Participant {
   following: number;
 }
 
+
+
 // Mock data for users with enhanced profile information
 const mockParticipants: Participant[] = [
   {
@@ -481,6 +483,35 @@ const ChatRoom = () => {
     });
   };
 
+  
+    // Simple state tracking for button states
+    const [friendState, setFriendState] = useState(0); // 0: Add Friend, 1: Pending, 2: Friends
+    const [isFollowing, setIsFollowing] = useState(false);
+    
+    // Cycle through friend states: Add Friend -> Pending -> Friends -> Add Friend
+    const cycleFriendState = () => {
+      setFriendState((prev) => (prev + 1) % 3);
+    };
+    
+    // Toggle follow state
+    const toggleFollow = () => {
+      setIsFollowing((prev) => !prev);
+    };
+    
+    // Friend button styles based on state
+    const getFriendButtonStyles = () => {
+      if (friendState === 0) return "bg-purple-600 text-white hover:bg-purple-700";
+      if (friendState === 1) return "bg-gray-400 text-white";
+      return "bg-green-500 text-white";
+    };
+    
+    // Friend button text based on state
+    const getFriendButtonText = () => {
+      if (friendState === 0) return "Add Friend";
+      if (friendState === 1) return "Pending";
+      return "Friends";
+    };
+
   // ParticipantsList component
   const ParticipantsList = () => {
     if (selectedUser) {
@@ -518,30 +549,69 @@ const ChatRoom = () => {
           
           {/* Action Buttons */}
           <div className="flex justify-center space-x-3 mb-6">
-            <button 
-              onClick={() => handleAddFriend(selectedUser.id)}
-              className="flex items-center space-x-1 px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span>Add Friend</span>
-            </button>
-            
-            <button 
-              onClick={() => handleFollow(selectedUser.id)}
-              className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              <Star className="w-4 h-4" />
-              <span>Follow</span>
-            </button>
-            
-            <button 
-              onClick={() => handleOpenDirectMessage(selectedUser.id)}
-              className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Message</span>
-            </button>
-          </div>
+      {/* Add Friend Button */}
+      <button
+        onClick={cycleFriendState}
+        className={`flex items-center space-x-1 px-3 py-2 rounded-md transition-all duration-300 ${getFriendButtonStyles()}`}
+      >
+        <span className="w-4 h-4">
+          {friendState === 0 && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+              <line x1="17" y1="11" x2="23" y2="11" />
+            </svg>
+          )}
+          {friendState === 1 && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          )}
+          {friendState === 2 && (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <path d="M17 11l2 2l4-4" />
+            </svg>
+          )}
+        </span>
+        <span>{getFriendButtonText()}</span>
+      </button>
+      
+      {/* Follow Button */}
+      <button
+        onClick={toggleFollow}
+        className={`flex items-center space-x-1 px-3 py-2 border rounded-md transition-all duration-300 ${
+          isFollowing ? "bg-blue-500 border-blue-500 text-white" : "border-gray-300 hover:bg-gray-50"
+        }`}
+      >
+        <span className="w-4 h-4">
+          <svg
+            viewBox="0 0 24 24"
+            fill={isFollowing ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        </span>
+        <span>{isFollowing ? "Following" : "Follow"}</span>
+      </button>
+      
+      {/* Message Button */}
+      <button className="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-all duration-300">
+        <span className="w-4 h-4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </span>
+        <span>Message</span>
+      </button>
+    </div>
+
           
           {/* User Info */}
           <div className="space-y-4 text-sm">
