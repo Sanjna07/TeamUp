@@ -80,25 +80,28 @@ const DirectMessage = ({ isOpen, onClose, recipient }: Props) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-0 right-4 w-96 bg-white rounded-t-lg shadow-lg z-40">
-      <div className="p-4 border-b flex justify-between items-center">
+    <div className="fixed bottom-0 right-4 w-96 bg-black rounded-t-lg shadow-lg z-40 border border-gray-800 border-b-0">
+      <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-gradient-to-r from-blue-900 to-purple-900">
         <div className="flex items-center space-x-3">
-          <img
-            src={recipient.avatar}
-            alt={recipient.name}
-            className="w-8 h-8 rounded-full"
-          />
-          <span className="font-medium">{recipient.name}</span>
+          <div className="w-8 h-8 rounded-full p-0.5 bg-gradient-to-r from-blue-500 to-purple-600">
+            <img
+              src={recipient.avatar}
+              alt={recipient.name}
+              className="w-full h-full rounded-full"
+            />
+          </div>
+          <span className="font-medium text-white">{recipient.name}</span>
         </div>
+  
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-gray-300 hover:text-white"
         >
           <X className="w-5 h-5" />
         </button>
       </div>
-
-      <div className="h-96 overflow-y-auto p-4 space-y-4">
+  
+      <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-900">
         {messages.map((message) => (
           <Message
             key={message.id}
@@ -108,19 +111,19 @@ const DirectMessage = ({ isOpen, onClose, recipient }: Props) => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-
-      <form onSubmit={handleSendMessage} className="p-4 border-t">
+  
+      <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-800 bg-black">
         <div className="flex space-x-2">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 rounded-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+            className="flex-1 rounded-full bg-gray-900 border-gray-700 text-white focus:border-blue-500 focus:ring-purple-500"
           />
           <button
             type="submit"
-            className="bg-purple-600 text-white rounded-full p-2 hover:bg-purple-700"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full p-2 hover:from-blue-500 hover:to-purple-500"
           >
             <Send className="w-5 h-5" />
           </button>
@@ -128,6 +131,5 @@ const DirectMessage = ({ isOpen, onClose, recipient }: Props) => {
       </form>
     </div>
   );
-};
-
-export default DirectMessage;
+  
+  export default DirectMessage;
