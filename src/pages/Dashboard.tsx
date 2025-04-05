@@ -4,71 +4,78 @@ import { MessageSquare, Users, Plus } from 'lucide-react';
 import ChatRoomCard from '../components/ChatRoomCard';
 import CreateRoomModal from '../components/CreateRoomModal';
 
-
 interface Room {
-  id: string;
+  id?: string;
+  _id?: string;
   name: string;
   description: string;
   category: string;
   members: number;
 }
 
+const mockRooms: Room[] = [
+  {
+    id: 'general',
+    name: 'General Chat',
+    description: 'Welcome to TeamUp! Connect with everyone here.',
+    category: 'General',
+    members: 5,
+  },
+  {
+    id: 'ai-ml',
+    name: 'AI/ML Enthusiast',
+    description: 'Discuss AI and Machine Learning projects',
+    category: 'AI/ML',
+    members: 5,
+  },
+];
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  
+
+  const fetchRooms = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/rooms');
+      const data = await res.json();
+
+      const uniqueRooms = data.filter(
+        (room: Room) =>
+          !mockRooms.some(
+            (mock) => mock.name.toLowerCase() === room.name.toLowerCase()
+          )
+      );
+
+      setRooms([...mockRooms, ...uniqueRooms]);
+    } catch (error) {
+      console.error('Failed to fetch rooms:', error);
+      setRooms(mockRooms);
+    }
+  };
+
   useEffect(() => {
-    // TODO: Fetch rooms from your MongoDB backend
-    const mockRooms = [
-      {
-        id: 'general',
-        name: 'General Chat',
-        description: 'Welcome to TeamUp! Connect with everyone here.',
-        category: 'General',
-        members: 5
-      },
-      {
-        id: 'ai-ml',
-        name: 'AI/ML Enthusiast',
-        description: 'Discuss AI and Machine Learning projects',
-        category: 'AI/ML',
-        members: 5
-      },
-      // Add more mock rooms
-    ];
-    setRooms(mockRooms);
+    fetchRooms();
   }, []);
 
-  // Function to handle room creation
   const handleCreateRoom = async (roomData: any) => {
     try {
-      // TODO: Send room data to your MongoDB backend
-      console.log('Create room:', roomData);
-      
-      // Generate a temporary ID (in production, this would come from your backend)
-      const tempId = Date.now().toString();
-      
-      // Create a new room object with 0 members
-      const newRoom: Room = {
-        id: tempId,
-        name: roomData.name,
-        description: roomData.description,
-        category: roomData.category || 'General', // Default category if not provided
-        members: 0 // New room starts with 0 members
-      };
-      
-      // Add the new room to the rooms array
-      setRooms(prevRooms => [...prevRooms, newRoom]);
-      
-      // Close the modal
+      const res = await fetch('http://localhost:5000/api/rooms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(roomData),
+      });
+
+      if (!res.ok) throw new Error('Room creation failed');
+
+      const newRoom = await res.json();
       setIsCreateModalOpen(false);
-      
-      // Optionally, navigate to the new room
-      // navigate(`/chat/${tempId}`);
+      navigate(`/chat/room/${newRoom._id}`);
     } catch (error) {
       console.error('Error creating room:', error);
-      // Handle error (show error message to user)
+      alert('Failed to create room');
     }
   };
 
@@ -85,26 +92,29 @@ const Dashboard = () => {
             Create Room
           </button>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rooms.map((room) => (
             <ChatRoomCard
-              key={room.id}
+              key={room._id || room.id}
               room={room}
-              onClick={() => navigate(`/chat/${room.id}`)}
+              onClick={() =>
+                room.id === 'general' || room.id === 'ai-ml'
+                  ? navigate(`/chat/${room.id}`)
+                  : navigate(`/chat/room/${room._id}`)
+              }
             />
           ))}
         </div>
       </div>
-      
+
       <CreateRoomModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateRoom}
       />
-      
-      {/* DevArchetype Button - Bottom Right */}
-      <button 
+
+      <button
         onClick={() => navigate('/DevArchetype')}
         className="fixed bottom-6 right-6 bg-purple-600 text-white px-5 py-3 rounded-full
                 shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
@@ -130,6 +140,32 @@ const Dashboard = () => {
         </div>
       </button>
 
+      <button
+        onClick={() => navigate('/Aegis')}
+        className="fixed bottom-6 left-6 bg-cyan-600 text-white px-5 py-3 rounded-full
+          shadow-xl shadow-cyan-500/50 hover:bg-cyan-700 transition-all
+          before:absolute before:inset-0 before:rounded-full before:blur-lg
+          before:bg-cyan-500/30 before:animate-pulse"
+        style={{
+          animation: "float 3s ease-in-out infinite",
+          position: "fixed",
+          bottom: "1.5rem",
+          left: "1.5rem",
+        }}
+      >
+        AI Buddy
+        <div
+          className="text-sm mt-1"
+          style={{
+            animation: "pulse 2s infinite ease-in-out",
+            display: "block",
+            opacity: 0.8,
+          }}
+        >
+          Chat Now
+        </div>
+      </button>
+
       <style>
         {`
           @keyframes float {
@@ -137,7 +173,7 @@ const Dashboard = () => {
             50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
           }
-          
+
           @keyframes pulse {
             0% { opacity: 0.6; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.05); }
@@ -145,34 +181,6 @@ const Dashboard = () => {
           }
         `}
       </style>
-
-      {/* AI Buddy Button - Bottom Left */}
-<button 
-  onClick={() => navigate('/Aegis')}
-  className="fixed bottom-6 left-6 bg-cyan-600 text-white px-5 py-3 rounded-full
-          shadow-xl shadow-cyan-500/50 hover:bg-cyan-700 transition-all
-          before:absolute before:inset-0 before:rounded-full before:blur-lg
-          before:bg-cyan-500/30 before:animate-pulse"
-  style={{
-    animation: "float 3s ease-in-out infinite",
-    position: "fixed",
-    bottom: "1.5rem",
-    left: "1.5rem",
-  }}
->
-  AI Buddy
-  <div
-    className="text-sm mt-1"
-    style={{
-      animation: "pulse 2s infinite ease-in-out",
-      display: "block",
-      opacity: 0.8,
-    }}
-  >
-    Chat Now
-  </div>
-</button>
-
     </div>
   );
 };
