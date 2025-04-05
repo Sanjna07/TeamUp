@@ -39,44 +39,44 @@ const CreateRoomModal = ({ isOpen, onClose, onSubmit }: Props) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center backdrop-blur-sm">
+      <div className="bg-black rounded-lg p-8 max-w-md w-full border border-gray-800">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Create New Room</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text">Create New Room</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Room Name</label>
+            <label className="block text-sm font-medium text-white">Room Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+              className="mt-1 block w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-purple-500"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <label className="block text-sm font-medium text-white">Description</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+              className="mt-1 block w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-purple-500"
               rows={3}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Category</label>
+            <label className="block text-sm font-medium text-white">Category</label>
             <select
               value={formData.category}
               onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500"
+              className="mt-1 block w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-purple-500"
             >
               {CATEGORIES.map(category => (
                 <option key={category} value={category}>
@@ -90,13 +90,13 @@ const CreateRoomModal = ({ isOpen, onClose, onSubmit }: Props) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-gray-700 rounded-md text-gray-300 hover:bg-gray-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-md hover:from-blue-700 hover:to-purple-700"
             >
               Create Room
             </button>

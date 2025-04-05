@@ -20,20 +20,29 @@ const LandingPage = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(168,85,247,0.4)_0%,transparent_50%)]"></div>
       
       {/* Floating elements backdrop */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div 
-            key={i}
-            className="absolute bg-white/5 rounded-full w-12 h-12 animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${15 + Math.random() * 15}s`
-            }}
-          ></div>
-        ))}
-      </div>
+      {/* Floating elements backdrop */}
+<div className="absolute inset-0 overflow-hidden pointer-events-none">
+  {[...Array(20)].map((_, i) => {
+    const left = Math.random() * 100;
+    const top = Math.random() * 100;
+    const delay = Math.random() * 10;
+    const duration = 15 + Math.random() * 15;
+
+    return (
+      <div 
+        key={i}
+        className="absolute bg-white/5 rounded-full w-12 h-12 animate-float"
+        style={{
+          left: `${left}%`,
+          top: `${top}%`,
+          animationDelay: `${delay}s`,
+          animationDuration: `${duration}s`,
+        }}
+      ></div>
+    );
+  })}
+</div>
+
 
       {/* Header Navigation */}
       <header className="relative z-10 border-b border-white/10 backdrop-blur-sm">
