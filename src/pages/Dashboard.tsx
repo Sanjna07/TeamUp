@@ -4,6 +4,7 @@ import { MessageSquare, Users, Plus } from 'lucide-react';
 import ChatRoomCard from '../components/ChatRoomCard';
 import CreateRoomModal from '../components/CreateRoomModal';
 
+
 interface Room {
   id: string;
   name: string;
@@ -144,6 +145,34 @@ const Dashboard = () => {
           }
         `}
       </style>
+
+      {/* AI Buddy Button - Bottom Left */}
+<button 
+  onClick={() => navigate('/AIbuddy')}
+  className="fixed bottom-6 left-6 bg-cyan-600 text-white px-5 py-3 rounded-full
+          shadow-xl shadow-cyan-500/50 hover:bg-cyan-700 transition-all
+          before:absolute before:inset-0 before:rounded-full before:blur-lg
+          before:bg-cyan-500/30 before:animate-pulse"
+  style={{
+    animation: "float 3s ease-in-out infinite",
+    position: "fixed",
+    bottom: "1.5rem",
+    left: "1.5rem",
+  }}
+>
+  AI Buddy
+  <div
+    className="text-sm mt-1"
+    style={{
+      animation: "pulse 2s infinite ease-in-out",
+      display: "block",
+      opacity: 0.8,
+    }}
+  >
+    Chat Now
+  </div>
+</button>
+
     </div>
   );
 };

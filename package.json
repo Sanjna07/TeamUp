@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.30.7",
+    "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.344.0",
     "pusher-js": "^8.4.0-rc2",
