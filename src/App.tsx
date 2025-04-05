@@ -11,7 +11,8 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
 import DevArchetype from './pages/DevArchetype';
-import AIbuddy from './pages/AIbuddy';
+import Aegis from './pages/Aegis';
+
 
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -30,7 +31,7 @@ const AppContent = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chat/:roomId" element={<ChatRoom />} />
           <Route path="/DevArchetype" element={<DevArchetype/>} />
-          <Route path="/AIbuddy" element={<AIbuddy/>} />
+          <Route path="/Aegis" element={<Aegis/>} />
           <Route path="/settings" element={<Navigate to="/edit-profile" />} />
         </Route>
       </Routes>

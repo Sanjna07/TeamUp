@@ -148,7 +148,7 @@ const Dashboard = () => {
 
       {/* AI Buddy Button - Bottom Left */}
 <button 
-  onClick={() => navigate('/AIbuddy')}
+  onClick={() => navigate('/Aegis')}
   className="fixed bottom-6 left-6 bg-cyan-600 text-white px-5 py-3 rounded-full
           shadow-xl shadow-cyan-500/50 hover:bg-cyan-700 transition-all
           before:absolute before:inset-0 before:rounded-full before:blur-lg
