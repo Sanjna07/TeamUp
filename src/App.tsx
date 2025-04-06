@@ -13,6 +13,7 @@ import PrivateRoute from './components/PrivateRoute';
 import DevArchetype from './pages/DevArchetype';
 import Aegis from './pages/Aegis';
 import RoomChat from './pages/Roomchat';
+import AIMatchmaker from './pages/AIMatchmaker';
 
 
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -33,6 +34,7 @@ const AppContent = () => {
           <Route path="/chat/:roomId" element={<ChatRoom />} />
           <Route path="/DevArchetype" element={<DevArchetype/>} />
           <Route path="/Aegis" element={<Aegis/>} />
+          <Route path="/AIMatch" element={<AIMatchmaker />} />
           <Route path="/settings" element={<Navigate to="/edit-profile" />} />
           <Route path="/chat/room/:roomId" element={<RoomChat />} />
         </Route>

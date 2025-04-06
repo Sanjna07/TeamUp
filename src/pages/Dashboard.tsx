@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageSquare, Users, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import ChatRoomCard from '../components/ChatRoomCard';
 import CreateRoomModal from '../components/CreateRoomModal';
 
 interface Room {
-  id?: string;
   _id?: string;
+  id?: string;
   name: string;
   description: string;
   category: string;
@@ -50,7 +50,7 @@ const Dashboard = () => {
       setRooms([...mockRooms, ...uniqueRooms]);
     } catch (error) {
       console.error('Failed to fetch rooms:', error);
-      setRooms(mockRooms);
+      setRooms(mockRooms); // fallback
     }
   };
 
@@ -71,8 +71,11 @@ const Dashboard = () => {
       if (!res.ok) throw new Error('Room creation failed');
 
       const newRoom = await res.json();
+
+      // Add to state and redirect
+      setRooms((prev) => [...prev, newRoom]);
       setIsCreateModalOpen(false);
-      navigate(`/chat/room/${newRoom._id}`);
+      navigate(`/chat/${newRoom._id || newRoom.id}`);
     } catch (error) {
       console.error('Error creating room:', error);
       alert('Failed to create room');
@@ -92,80 +95,99 @@ const Dashboard = () => {
             Create Room
           </button>
         </div>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {rooms.map((room) => (
             <ChatRoomCard
               key={room._id || room.id}
               room={room}
-              onClick={() =>
-                room.id === 'general' || room.id === 'ai-ml'
-                  ? navigate(`/chat/${room.id}`)
-                  : navigate(`/chat/room/${room._id}`)
-              }
+              onClick={() => navigate(`/chat/${room._id || room.id}`)}
             />
           ))}
         </div>
       </div>
-
+      
       <CreateRoomModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateRoom}
       />
-
-      <button
-        onClick={() => navigate('/DevArchetype')}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white px-5 py-3 rounded-full
-                shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
-                before:absolute before:inset-0 before:rounded-full before:blur-lg
-                before:bg-blue-500/30 before:animate-pulse"
-        style={{
-          animation: "float 3s ease-in-out infinite",
-          position: "fixed",
-          bottom: "1.5rem",
-          right: "1.5rem",
-        }}
-      >
-        DevArchetype
-        <div
-          className="text-sm mt-1"
+      
+      {/* Vertical stack of buttons in right corner */}
+      <div className="fixed right-6 bottom-6 flex flex-col gap-4">
+        {/* AI Matchmaking Button */}
+        <button
+          onClick={() => navigate('/AIMatch')}
+          className="bg-purple-600 text-white px-5 py-3 rounded-full
+            shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
+            before:absolute before:inset-0 before:rounded-full before:blur-lg
+            before:bg-blue-500/30 before:animate-pulse"
           style={{
-            animation: "pulse 2s infinite ease-in-out",
-            display: "block",
-            opacity: 0.8,
+            animation: 'float 3s ease-in-out infinite',
           }}
         >
-          Take Test
-        </div>
-      </button>
-
-      <button
-        onClick={() => navigate('/Aegis')}
-        className="fixed bottom-6 left-6 bg-cyan-600 text-white px-5 py-3 rounded-full
-          shadow-xl shadow-cyan-500/50 hover:bg-cyan-700 transition-all
-          before:absolute before:inset-0 before:rounded-full before:blur-lg
-          before:bg-cyan-500/30 before:animate-pulse"
-        style={{
-          animation: "float 3s ease-in-out infinite",
-          position: "fixed",
-          bottom: "1.5rem",
-          left: "1.5rem",
-        }}
-      >
-        AI Buddy
-        <div
-          className="text-sm mt-1"
+          AI Matchmaking
+          <div
+            className="text-sm mt-1"
+            style={{
+              animation: 'pulse 2s infinite ease-in-out',
+              display: 'block',
+              opacity: 0.8,
+            }}
+          >
+            Find Buddy
+          </div>
+        </button>
+        
+        {/* AI Buddy Button */}
+        <button
+          onClick={() => navigate('/Aegis')}
+          className="bg-purple-600 text-white px-5 py-3 rounded-full
+            shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
+            before:absolute before:inset-0 before:rounded-full before:blur-lg
+            before:bg-blue-500/30 before:animate-pulse"
           style={{
-            animation: "pulse 2s infinite ease-in-out",
-            display: "block",
-            opacity: 0.8,
+            animation: 'float 3s ease-in-out infinite',
           }}
         >
-          Chat Now
-        </div>
-      </button>
-
+          AI Buddy
+          <div
+            className="text-sm mt-1"
+            style={{
+              animation: 'pulse 2s infinite ease-in-out',
+              display: 'block',
+              opacity: 0.8,
+            }}
+          >
+            Chat Now
+          </div>
+        </button>
+        
+        {/* DevArchetype Button */}
+        <button
+          onClick={() => navigate('/DevArchetype')}
+          className="bg-purple-600 text-white px-5 py-3 rounded-full
+            shadow-xl shadow-blue-500/50 hover:bg-purple-700 transition-all
+            before:absolute before:inset-0 before:rounded-full before:blur-lg
+            before:bg-blue-500/30 before:animate-pulse"
+          style={{
+            animation: 'float 3s ease-in-out infinite',
+          }}
+        >
+          DevArchetype
+          <div
+            className="text-sm mt-1"
+            style={{
+              animation: 'pulse 2s infinite ease-in-out',
+              display: 'block',
+              opacity: 0.8,
+            }}
+          >
+            Take Test
+          </div>
+        </button>
+      </div>
+      
       <style>
         {`
           @keyframes float {
@@ -173,7 +195,7 @@ const Dashboard = () => {
             50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
           }
-
+          
           @keyframes pulse {
             0% { opacity: 0.6; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.05); }
@@ -183,6 +205,5 @@ const Dashboard = () => {
       </style>
     </div>
   );
-};
-
-export default Dashboard;
+}
+  export default Dashboard;
